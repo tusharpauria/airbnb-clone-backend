@@ -1,10 +1,12 @@
 package com.tushar.projects.airbnbapp.service;
 
 import com.tushar.projects.airbnbapp.dto.HotelDto;
+import com.tushar.projects.airbnbapp.dto.HotelPriceDto;
 import com.tushar.projects.airbnbapp.dto.HotelSearchRequest;
 import com.tushar.projects.airbnbapp.entity.Hotel;
 import com.tushar.projects.airbnbapp.entity.Inventory;
 import com.tushar.projects.airbnbapp.entity.Room;
+import com.tushar.projects.airbnbapp.repository.HotelMinPriceRepository;
 import com.tushar.projects.airbnbapp.repository.InventoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +26,7 @@ import java.time.temporal.ChronoUnit;
 public class InventoryServiceImpl implements InventoryService {
 
     private final InventoryRepository inventoryRepository;
-    private final ModelMapper modelMapper;
+    private final HotelMinPriceRepository hotelMinPriceRepository;
 
     @Override
     public void initializeRoomForAYear(Room room) {
@@ -63,7 +65,7 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    public Page<HotelDto> searchHotels(HotelSearchRequest hotelSearchRequest) {
+    public Page<HotelPriceDto> searchHotels(HotelSearchRequest hotelSearchRequest) {
 
         log.info("Searching hotels for {} city, from {} to {}",
                 hotelSearchRequest.getCity(),
@@ -74,11 +76,11 @@ public class InventoryServiceImpl implements InventoryService {
 
         long dateCount = ChronoUnit.DAYS.between(hotelSearchRequest.getStartDate(), hotelSearchRequest.getEndDate()) + 1;
 
-        Page<Hotel> hotelPage = inventoryRepository.findHotelsWithAvailableInventory(hotelSearchRequest.getCity(),
+        Page<HotelPriceDto> hotelPage = hotelMinPriceRepository.findHotelsWithAvailableInventory(hotelSearchRequest.getCity(),
                 hotelSearchRequest.getStartDate(), hotelSearchRequest.getEndDate(), hotelSearchRequest.getRoomsCount(),
                 dateCount, pageable);
 
-        return hotelPage.map((element) -> modelMapper.map(element, HotelDto.class));
+        return hotelPage;
 
     }
 }

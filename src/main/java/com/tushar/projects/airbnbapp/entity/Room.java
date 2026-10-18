@@ -1,5 +1,6 @@
 package com.tushar.projects.airbnbapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

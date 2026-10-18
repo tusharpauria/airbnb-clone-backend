@@ -2,6 +2,7 @@ package com.tushar.projects.airbnbapp.controller;
 
 import com.tushar.projects.airbnbapp.dto.HotelDto;
 import com.tushar.projects.airbnbapp.dto.HotelInfoDto;
+import com.tushar.projects.airbnbapp.dto.HotelPriceDto;
 import com.tushar.projects.airbnbapp.dto.HotelSearchRequest;
 import com.tushar.projects.airbnbapp.service.HotelService;
 import com.tushar.projects.airbnbapp.service.InventoryService;
@@ -22,9 +23,9 @@ public class HotelBrowseController {
     private final HotelService hotelService;
 
     @GetMapping("/search")
-    public ResponseEntity<Page<HotelDto>> searchHotels(@RequestBody HotelSearchRequest hotelSearchRequest) {
+    public ResponseEntity<Page<HotelPriceDto>> searchHotels(@RequestBody HotelSearchRequest hotelSearchRequest) {
 
-        Page<HotelDto> page = inventoryService.searchHotels(hotelSearchRequest);
+        var page = inventoryService.searchHotels(hotelSearchRequest);
 
         return ResponseEntity.ok(page);
 
